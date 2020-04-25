@@ -3,19 +3,25 @@ package com.automation.pages;
 import com.automation.utilities.BrowserUtils;
 import com.automation.utilities.Driver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.util.List;
+import java.util.Map;
 
 public class CalendarEventPage extends BasePage {
+
     public CalendarEventPage() {
         PageFactory.initElements(Driver.getDriver(), this);
     }
+
+
 
     @FindBy(xpath = "(//a[@class='dropdown-toggle'])[4]")
     public WebElement threeDots;
@@ -33,18 +39,16 @@ public class CalendarEventPage extends BasePage {
 
     @FindBy(xpath = "(//input[@placeholder='time'])[1]")
     public WebElement time;
-    @FindBy(xpath = "(//li[@class='ui-timepicker-pm'])[19]")
-    public WebElement nine;
-//@FindBy (xpath = "//div[@id='bottom-anchor']/following-sibling::ul//a")
-//public WebElement EditViewDelet;
+    @FindBy(xpath = "(//ul[@class='ui-timepicker-list']/li[text()='9:00 PM'])[1]")
+    public WebElement startTimeNine;
 
     @FindBy(name = "oro_calendar_event_form[allDay]")
     public WebElement allDayCheckbox;
 
     @FindBy(css = "input[id^='recurrence-repeat']")
     public WebElement repeatCheckbox;
-
-
+    @FindBy(css = "select[id^='recurrence-repeat']")
+    public WebElement repeatDropDown;
     public WebElement startTime;
     @FindBy(css = "[id^='time_selector_oro_calendar_event_form_end']")
     public WebElement endTime;
@@ -87,8 +91,10 @@ public class CalendarEventPage extends BasePage {
 
     @FindBy(css = "select[class='ui-datepicker-year']")
     public WebElement year;
-
-
+    @FindBy(css = ".multi-checkbox-control__item>input[value='monday']")
+public WebElement mondayCheckbox;
+    @FindBy(css =".multi-checkbox-control__item>input[value='friday']" )
+public WebElement fridayCheckbox;
     public void set18() {//this for testcase 11
         List<WebElement> allDates = driver.findElements(By.xpath("//table[@class='ui-datepicker-calendar']//td"));
         for (WebElement ele : allDates) {
@@ -100,7 +106,7 @@ public class CalendarEventPage extends BasePage {
         }
     }
 
-    public void moveTo() {//this for testcase 1 to move to 3dots
+    public void moveToThreeDotes() {//this for testcase 1 to move to 3dots
         String treeDot = "(//a[@class='dropdown-toggle'])[4]";
         WebElement treeDotEl = driver.findElement(By.xpath(treeDot));
         Actions actions = new Actions(driver);
@@ -126,12 +132,12 @@ public class CalendarEventPage extends BasePage {
         return startTime.getAttribute("value");
     }
 
-    public String getEndTime() {
-        BrowserUtils.waitForPageToLoad(10);
-        wait.until(ExpectedConditions.visibilityOf(endTime));
-        return endTime.getAttribute("value");
+//    public String getEndTime() {
+//        BrowserUtils.waitForPageToLoad(10);
+//        wait.until(ExpectedConditions.visibilityOf(endTime));
+//        return endTime.getAttribute("value");
 
     }
 
 
-    }
+

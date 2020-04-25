@@ -5,14 +5,12 @@ import com.automation.utilities.Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
-import java.util.List;
 
 public abstract class BasePage {
     public BasePage() {
@@ -41,26 +39,32 @@ public WebDriverWait wait = new WebDriverWait(driver, 25);
     }
 
 
-    public void navigateTo(String tabName, String moduleName) {
-        String tabNameXpath = "//span[@class='title title-level-1' and contains(text(),'" + tabName + "')]";
-        String moduleXpath = "//span[@class='title title-level-2' and text()='" + moduleName + "']";
 
-        WebElement tabElement = driver.findElement(By.xpath(tabNameXpath));
-        WebElement moduleElement = driver.findElement(By.xpath(moduleXpath));
+    public void navigateToCalendarEvents(){
+        WebElement loaderMask= null;
+        driver = Driver.getDriver();
+        wait= new WebDriverWait(driver, 20);
+        if(driver.findElements(By.cssSelector("div[class='loader-mask shown']")).size()>0) {
+            loaderMask = driver.findElement(By.cssSelector("div[class='loader-mask shown']"));
+            wait.until(ExpectedConditions.invisibilityOf(loaderMask));
+        }
 
-        Actions actions = new Actions(driver);
+        WebElement activitiesElement = driver.findElement(By.linkText("Activities"));
+        wait.until(ExpectedConditions.visibilityOf(activitiesElement));
+        wait.until(ExpectedConditions.elementToBeClickable(activitiesElement));
+        activitiesElement.click();
 
-        BrowserUtils.wait(4);
+        WebElement calendarEventsElement = driver.findElement(By.linkText("Calendar Events"));
+        wait.until(ExpectedConditions.visibilityOf(calendarEventsElement));
+        wait.until(ExpectedConditions.elementToBeClickable(calendarEventsElement));
+        calendarEventsElement.click();
 
-        actions.moveToElement(tabElement).
-                pause(2000).
-                click(moduleElement).
-                build().perform();
-
-        //increase this wait time if still failing
-        BrowserUtils.wait(4);
+        wait.until(ExpectedConditions.invisibilityOf(loaderMask));
     }
-}
+
+
+    }
+
 
 
 
